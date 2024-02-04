@@ -78,7 +78,7 @@ def get_human_readable_response(weather_data, user_query, model="gpt-3.5-turbo")
 
 
 # Sử dụng
-user_query = "Thời tiết ở Da Lat đang như thế nào?"
+user_query = "Thời tiết ở Hà Nội đang như thế nào?"
 weather_data = call_model_with_function(user_query)
 human_response = get_human_readable_response(weather_data, user_query)
 print(human_response)
