@@ -20,7 +20,7 @@ def analyze_csv(file_path):
         return str(e), None, None
 
 # Thay thế 'your_file_path.csv' với đường dẫn tệp CSV của bạn
-file_path = 'data/fine_food_reviews_with_embeddings.csv'
+file_path = 'data/winter_olympics_2022.csv'
 num_records, columns_info, random_records = analyze_csv(file_path)
 
 print("Số lượng bản ghi:", num_records)
