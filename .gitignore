@@ -1,3 +1,5 @@
 # Tệp cấu hình môi trường chứa API key và các biến môi trường khác
 .env
 data/*
+tts-output/*
+hoang-tu-be-mp3/*
