@@ -1,0 +1,45 @@
+@startuml query
+skinparam monochrome true
+
+' Define components
+package "Text Search Process" {
+    [Initialize Qdrant Client] as InitQdrantText
+    [Initialize NLP Model] as InitNLP
+    [Encode Query with NLP] as EncodeQueryText
+    [Perform Text Search] as PerformSearchText
+    [Extract Payload] as ExtractPayloadText
+    note right of InitNLP: Uses all-MiniLM-L6-v2
+}
+
+package "Code Search Process" {
+    [Initialize Qdrant Client] as InitQdrantCode
+    [Initialize NLP and Code Models] as InitModels
+    [Encode Query with NLP] as EncodeQueryNLP
+    [Encode Query with Code Model] as EncodeQueryCode
+    [Perform Text Search] as PerformSearchTextCode
+    [Perform Code Search] as PerformSearchCode
+    [Combine Results] as CombineResults
+    note right of InitModels: Uses all-MiniLM-L6-v2 \nand jinaai/jina-embeddings-v2-base-code
+}
+
+' Connect components
+InitQdrantText -down-> InitNLP
+InitNLP -down-> EncodeQueryText
+EncodeQueryText -down-> PerformSearchText
+PerformSearchText -down-> ExtractPayloadText
+
+InitQdrantCode -down-> InitModels
+InitModels -down-> EncodeQueryNLP
+InitModels -down-> EncodeQueryCode
+EncodeQueryNLP -down-> PerformSearchTextCode
+EncodeQueryCode -down-> PerformSearchCode
+PerformSearchTextCode -right-> CombineResults
+PerformSearchCode -left-> CombineResults
+
+' Legend
+legend right
+|<color:Green>Green</color>|: Processes specific to text search|
+|<color:Blue>Blue</color>|: Processes specific to code search|
+endlegend
+
+@enduml

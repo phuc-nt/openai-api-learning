@@ -1,0 +1,53 @@
+@startuml compare
+
+' Define skin parameters
+skinparam rectangle {
+    StrokeColor Black
+    FontName Courier
+}
+
+' Define components
+package "Common Setup" {
+    [Load Environment Variables] as LoadEnv
+    [Initialize Qdrant Client] as InitQdrant
+}
+
+package "Text Embedding Pipeline" {
+    rectangle "Normal Text Embedding" {
+        [Read JSON Data] as ReadJSON1
+        [Extract Descriptions] as ExtractDesc
+        [Encode Descriptions with NLP Model] as EncodeNLP
+        [Create/Recreate Collection in Qdrant] as CreateColl1
+        [Upload Encoded Vectors to Qdrant] as UploadVec1
+    }
+}
+
+package "Source Code Embedding Pipeline" {
+    rectangle "Source Code Embedding" {
+        [Read JSON Data] as ReadJSON2
+        [Convert Code to Natural Language Text] as ConvertText
+        [Encode Text with NLP Model] as EncodeNLP2
+        [Encode Code with Specialized Model] as EncodeCode
+        [Create/Recreate Collection in Qdrant] as CreateColl2
+        [Upload Encoded Vectors to Qdrant] as UploadVec2
+    }
+}
+
+' Connect components
+LoadEnv -down-> InitQdrant
+
+InitQdrant -right-> ReadJSON1
+ReadJSON1 --> ExtractDesc
+ExtractDesc --> EncodeNLP
+EncodeNLP --> CreateColl1
+CreateColl1 --> UploadVec1
+
+InitQdrant -left-> ReadJSON2
+ReadJSON2 --> ConvertText
+ConvertText --> EncodeNLP2
+ConvertText --> EncodeCode
+EncodeNLP2 -down-> CreateColl2
+EncodeCode --> CreateColl2
+CreateColl2 --> UploadVec2
+
+@enduml
