@@ -7,7 +7,7 @@ import csv
 client = OpenAI()
 
 # Đường dẫn đến thư mục chứa các file PDF
-folder_path = 'F:/phucnt/Workspace/rag-vietnam-literature-search/book1'
+folder_path = 'F:/phucnt/Workspace/rag-vietnam-literature-search/book3'
 file_names = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
 
 # Tên của Vector Store

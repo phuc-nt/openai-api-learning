@@ -15,7 +15,7 @@ for store in vector_stores.data:
         break
 
 if vector_store_id is None:
-    print("Không tìm thấy Vector Store có tên 'Vietnamese Literature'")
+    print(f"Không tìm thấy Vector Store có tên '{vector_store_name}'")
 else:
     # Lấy và in danh sách các file trong Vector Store
     files = client.beta.vector_stores.files.list(vector_store_id=vector_store_id)
