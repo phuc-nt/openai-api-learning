@@ -1,69 +1,79 @@
-Dựa trên ý tưởng của bạn về việc tự động hóa việc thu thập và phân tích các bình luận trên Pull Request (PR) trên GitHub, dưới đây là một Requirement Definition chi tiết mà bạn có thể sử dụng để phát triển ứng dụng của mình. Bản mô tả này bao gồm các yêu cầu kỹ thuật, chức năng, và các yêu cầu không kỹ thuật.
-
 ### Requirement Definition cho Ứng Dụng Tự Động Hóa Quản Lý Comment trên GitHub PR
 
-#### 1. Thu Thập Comment
-**Mục đích:**
-- Tự động lấy các bình luận từ các Pull Request trên các repository GitHub định trước.
+#### Tổng quan
+Ứng dụng này nhằm mục đích tự động hóa quá trình thu thập, phân loại, thống kê và phân tích các bình luận từ các Pull Request (PR) trên GitHub, và đưa ra các đề xuất hành động dựa trên phân tích đó.
 
-**Yêu cầu chức năng:**
-- Kết nối với GitHub API để truy xuất các bình luận từ PR.
-- Xác thực và quản lý quyền truy cập thông qua OAuth hoặc token API.
-- Lọc và thu thập bình luận dựa trên các tiêu chí nhất định (ví dụ: PR mở, PR đã đóng, v.v.).
-- Lưu trữ dữ liệu bình luận vào file CSV với các trường thông tin như ID của bình luận, nội dung, tác giả, ngày giờ, v.v.
+#### Các Module Chính và Chức Năng
 
-**Công nghệ sử dụng:**
-- Ngôn ngữ lập trình: Python
-- Thư viện: `requests` hoặc `PyGithub`
+1. **PR Collect Module**
+   - **Mục đích:** Thu thập các bình luận từ PR trên GitHub.
+   - **Chức năng:**
+     - Kết nối với GitHub API để truy xuất bình luận.
+     - Lưu trữ bình luận vào CSV.
+   - **Công nghệ:** Python, GitHub API, pandas.
 
-#### 2. Phân Loại Comment
-**Mục đích:**
-- Phân loại các bình luận theo danh mục và nguyên nhân gốc rễ dựa trên nội dung.
+2. **Classify Module**
+   - **Mục đích:** Phân loại các bình luận dựa trên nội dung.
+   - **Chức năng:**
+     - Đọc bình luận từ CSV.
+     - Gửi bình luận đến OpenAI API để phân loại.
+     - Nhận kết quả phân loại và cập nhật vào CSV.
+   - **Công nghệ:** Python, OpenAI API, pandas.
 
-**Yêu cầu chức năng:**
-- Định nghĩa các danh mục và nguyên nhân gốc rễ trong system prompt.
-- Sử dụng OpenAI API để gửi bình luận và nhận phân loại dưới dạng JSON.
-- Cập nhật file CSV với các trường phân loại.
+3. **Plotting Module**
+   - **Mục đích:** Tạo biểu đồ thống kê từ dữ liệu bình luận đã phân loại.
+   - **Chức năng:**
+     - Đọc dữ liệu từ CSV.
+     - Vẽ biểu đồ và lưu vào file.
+   - **Công nghệ:** Python, matplotlib, pandas.
 
-**Công nghệ sử dụng:**
-- OpenAI API
-- Ngôn ngữ lập trình: Python
-- Thư viện: `openai`, `pandas`
+4. **Analysis Module**
+   - **Mục đích:** Phân tích các biểu đồ và dữ liệu thống kê để đưa ra các đề xuất hành động.
+   - **Chức năng:**
+     - Đọc biểu đồ và dữ liệu từ file.
+     - Gửi dữ liệu đến OpenAI API để yêu cầu phân tích.
+     - Nhận phân tích và đề xuất hành động từ OpenAI.
+     - Lưu kết quả phân tích vào file.
+   - **Công nghệ:** Python, OpenAI API.
 
-#### 3. Thống Kê Kết Quả Phân Loại
-**Mục đích:**
-- Vẽ biểu đồ thống kê để hiển thị phân bố của các danh mục bình luận.
+#### Yêu Cầu Không Kỹ Thuật
+- **Bảo mật:** Quản lý an toàn các khóa API và thông tin nhạy cảm.
+- **Hiệu suất:** Đảm bảo hệ thống xử lý và phản hồi nhanh chóng, kể cả khi số lượng bình luận lớn.
+- **Khả năng mở rộng:** Có thể mở rộng để xử lý nhiều repository và tăng khối lượng dữ liệu mà không làm giảm hiệu suất.
 
-**Yêu cầu chức năng:**
-- Đọc dữ liệu từ file CSV.
-- Sử dụng các thư viện thống kê của Python để tính toán và vẽ biểu đồ (ví dụ: số lượng bình luận theo danh mục).
-- Xuất kết quả dưới dạng biểu đồ và báo cáo số liệu.
-
-**Công nghệ sử dụng:**
-- Ngôn ngữ lập trình: Python
-- Thư viện: `matplotlib`, `pandas`
-
-#### 4. Phân Tích Kết Quả Thống Kê và Đề Xuất Hành Động
-**Mục đích:**
-- Phân tích các kết quả thống kê và đề xuất các hành động tiếp theo.
-
-**Yêu cầu chức năng:**
-- Gửi các kết quả thống kê (ảnh biểu đồ và số liệu) cho OpenAI GPT.
-- Sử dụng phản hồi từ OpenAI GPT để phân tích và đề xuất các hành động tiếp theo.
-- Lưu các đề xuất hành động vào file.
-
-**Công nghệ sử dụng:**
-- OpenAI API
-- Ngôn ngữ lập trình: Python
-- Thư viện: `openai`, `pandas`, `matplotlib`
-
-### Yêu Cầu Không Kỹ Thuật
-- **Bảo mật:**
-
- Đảm bảo dữ liệu nhạy cảm và quyền truy cập được bảo vệ một cách nghiêm ngặt.
-- **Hiệu suất:** Đảm bảo ứng dụng có thể xử lý một lượng lớn bình luận một cách hiệu quả.
-- **Khả năng mở rộng:** Thiết kế ứng dụng có khả năng mở rộng để có thể thêm nhiều repository hoặc tính năng mới một cách dễ dàng.
-
-Bạn có thể sử dụng Requirement Definition này như là khung sườn để phát triển và triển khai dự án của mình.
-
+### Sequence Diagram
 ![alt text](image.png)
+
+Dưới đây là checklist ngắn gọn để bạn theo dõi tiến độ của dự án tự động hóa việc quản lý comment trên GitHub PR, dựa trên các chức năng chính đã nêu trong Requirement Definition Document (RDD) mới:
+
+### Checklist Theo Dõi Tiến Độ Dự Án
+
+#### 1. PR Collect Module
+- [ ] Đã thiết lập và cấu hình xác thực GitHub API.
+- [ ] Hoàn thành script thu thập bình luận từ PR.
+- [ ] Đã kiểm tra và xác nhận việc lưu trữ bình luận vào CSV.
+- [ ] Đã thực hiện kiểm thử tích hợp với GitHub API.
+
+#### 2. Classify Module
+- [ ] Đã hoàn thành script đọc bình luận từ CSV.
+- [ ] Đã tích hợp OpenAI API để phân loại bình luận.
+- [ ] Kiểm thử phân loại bình luận và cập nhật vào CSV.
+- [ ] Đã kiểm tra độ chính xác của kết quả phân loại.
+
+#### 3. Plotting Module
+- [ ] Hoàn thành script đọc dữ liệu từ CSV.
+- [ ] Phát triển chức năng vẽ biểu đồ từ dữ liệu phân loại.
+- [ ] Kiểm thử việc lưu biểu đồ vào file.
+- [ ] Đảm bảo biểu đồ thể hiện đúng thông tin dữ liệu.
+
+#### 4. Analysis Module
+- [ ] Hoàn thành script đọc biểu đồ và dữ liệu từ file.
+- [ ] Tích hợp OpenAI API để yêu cầu phân tích và đề xuất.
+- [ ] Kiểm thử việc nhận và xử lý phân tích từ OpenAI.
+- [ ] Lưu trữ kết quả phân tích vào file và kiểm tra tính chính xác.
+
+#### Chức Năng Tổng Hợp và Kiểm Thử
+- [ ] Kiểm thử tổng thể toàn bộ dòng chảy dữ liệu và chức năng.
+- [ ] Đánh giá và khắc phục lỗi trên toàn hệ thống.
+- [ ] Chuẩn bị tài liệu hướng dẫn sử dụng và bảo trì hệ thống.
+- [ ] Tổ chức phiên đào tạo sử dụng hệ thống cho người dùng cuối (nếu cần).
