@@ -1,0 +1,38 @@
+@startuml PR Comment Analysis
+actor User
+participant "PR Collect Module" as Collect
+participant "Classify Module" as Classify
+participant "Plotting Module" as Plotting
+participant "Analysis Module" as Analysis
+participant "GitHub API" as GitHub
+participant "OpenAI API" as OpenAI
+database "CSV File" as CSV
+database "File" as File
+
+User -> Collect : Request
+Collect -> GitHub : Request PR Comments
+GitHub -> Collect : Return PR Comments
+Collect-> CSV : Store Comments
+
+loop For each comment
+    Classify -> CSV : Get comment
+    CSV -> Classify : Return comment
+    Classify -> OpenAI : Send comment for classification
+    OpenAI -> Classify : Return classification
+    Classify -> CSV : Update classification
+end
+
+User -> CSV : Confirm and Edit
+
+User -> Plotting : Request
+Plotting -> CSV : Read classified data
+Plotting -> Plotting : Plotting
+Plotting -> File : Save plots
+
+Analysis -> File: Read plots and data
+File -> Analysis : Return data for analysis
+Analysis -> OpenAI : Request insights
+OpenAI -> Analysis : Provide insights and actions
+Analysis -> File : Store analysis results
+
+@enduml

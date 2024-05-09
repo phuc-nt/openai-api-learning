@@ -65,3 +65,5 @@ Dựa trên ý tưởng của bạn về việc tự động hóa việc thu th�
 - **Khả năng mở rộng:** Thiết kế ứng dụng có khả năng mở rộng để có thể thêm nhiều repository hoặc tính năng mới một cách dễ dàng.
 
 Bạn có thể sử dụng Requirement Definition này như là khung sườn để phát triển và triển khai dự án của mình.
+
+![alt text](image.png)
