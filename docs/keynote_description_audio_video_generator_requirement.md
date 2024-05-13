@@ -43,3 +43,6 @@ Phát triển một hệ thống tự động hóa để chuyển đổi các t�
 - **Phát triển và tích hợp các module:** ??
 - **Kiểm thử và tối ưu hóa:** ??
 - **Triển khai và đào tạo người dùng:** ??
+
+### Sequence Diagram
+![image](https://github.com/tech-learners-ai/nphuc_openai_api_study/assets/17255682/9f0ed53c-f0f0-464d-8386-c81fa16ae757)
