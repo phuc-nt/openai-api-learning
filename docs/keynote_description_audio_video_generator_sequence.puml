@@ -1,0 +1,32 @@
+@startuml Video Creation from Keynote
+actor User
+participant "Image Conversion Module" as ImageConversion
+participant "Text Generation Module" as TextGeneration
+participant "Audio Generation Module" as AudioGeneration
+participant "Video Creation Module" as VideoCreation
+database "Image File" as ImageFile
+database "Text File" as TextFile
+database "Audio File" as AudioFile
+
+User -> ImageConversion : Upload file (PPTX, PDF)
+ImageConversion -> ImageFile : Store converted images
+
+loop For each image
+    ImageFile -> TextGeneration : Send image
+    TextGeneration -> OpenAI : Request text generation
+    OpenAI -> TextGeneration : Return generated text
+    TextGeneration -> TextFile : Store text
+end
+
+TextFile -> AudioGeneration : Retrieve text
+AudioGeneration -> OpenAI : Convert text to speech
+OpenAI -> AudioGeneration : Return audio
+AudioGeneration -> AudioFile : Store audio
+
+User -> VideoCreation : Request video creation
+VideoCreation -> ImageFile : Get images
+VideoCreation -> AudioFile : Get audio tracks
+VideoCreation -> VideoCreation : Create video from images and audio
+VideoCreation -> User : Deliver final video
+
+@enduml
