@@ -7,3 +7,4 @@ study-video/*
 assistant-output/*
 vector-store-history/*
 00-temp-code/*
+00-prepare-data/*
